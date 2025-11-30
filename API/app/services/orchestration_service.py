@@ -10,6 +10,7 @@ import requests
 from typing import Dict, Any, List, Tuple, Optional
 from ultralytics import YOLO
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -18,8 +19,8 @@ class OrchestrationService:
 
     def __init__(
         self,
-        pose_model_path: str = "models/yolov8n-pose.pt",
-        ppe_service_url: str = "http://localhost:3002"
+        pose_model_path: Optional[str] = None,
+        ppe_service_url: Optional[str] = None
     ):
         """
         Inicializa el servicio orquestador
@@ -28,8 +29,15 @@ class OrchestrationService:
             pose_model_path: Ruta al modelo YOLOv8-Pose
             ppe_service_url: URL del microservicio de detección EPP
         """
-        self.pose_model_path = pose_model_path
-        self.ppe_service_url = ppe_service_url
+        self.pose_model_path = pose_model_path or os.getenv(
+            "POSE_MODEL_PATH",
+            "models/yolov8n-pose.pt"
+        )
+
+        self.ppe_service_url = ppe_service_url or os.getenv(
+            "PPE_SERVICE_URL",
+            "http://localhost:3002"    
+        )
         self.pose_model = None
         self._load_pose_model()
 
