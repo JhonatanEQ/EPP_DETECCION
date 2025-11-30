@@ -394,7 +394,7 @@ npm run dev
 
 Pull requests y reportes son bienvenidos.
 Usa:
-[https://github.com/turepo/NormasEPP/issues](https://github.com/turepo/NormasEPP/issues)
+https://github.com/JhonatanEQ/EPP_DETECCION
 
 ---
 
