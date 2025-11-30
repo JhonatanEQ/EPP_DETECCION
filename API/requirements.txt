@@ -1,0 +1,25 @@
+# FastAPI y servidor
+fastapi==0.115.0
+uvicorn[standard]==0.32.0
+python-multipart==0.0.12
+
+# Validación de datos y configuración
+pydantic==2.9.0
+pydantic-settings==2.5.0
+python-dotenv==1.0.0
+
+# Procesamiento de imágenes
+pillow==11.0.0
+numpy==2.1.3
+opencv-python==4.10.0.84
+
+# YOLO v8 para detección de EPP
+ultralytics==8.3.30
+torch>=2.6.0
+torchvision>=0.20.1
+
+opencv-python>=4.8.0
+numpy>=1.24.0
+Pillow>=10.0.0
+albumentations>=1.3.1
+tqdm>=4.66.0
