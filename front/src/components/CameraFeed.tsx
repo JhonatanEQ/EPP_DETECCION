@@ -143,7 +143,7 @@ export const CameraFeed = forwardRef<CameraFeedHandle, CameraFeedProps>(
       canvas.height = targetHeight
       context.drawImage(source, 0, 0, targetWidth, targetHeight)
 
-      let imageData = canvas.toDataURL('image/jpeg', 0.6)
+      let imageData = canvas.toDataURL('image/jpeg', 0.8)
       let sizeKB = (imageData.length * 0.75) / 1024
 
       if (sizeKB > 1024) {

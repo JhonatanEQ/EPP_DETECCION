@@ -42,13 +42,16 @@ export async function detectPPE(
   confidence: number = 0.5
 ): Promise<DetectionResponse> {
   try {
+    const base64Image = imageData.startsWith('data:')
+      ? imageData.split(',')[1]
+      : imageData
     const response = await fetch(`${API_URL}/api/detect`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        image: imageData,
+        image: base64Image,
         confidence,
       }),
     })
@@ -223,14 +226,18 @@ export class PPEWebSocket {
     
     if (state === WebSocket.OPEN) {
       try {
+        const base64Image = imageData.startsWith('data:')
+          ? imageData.split(',')[1]
+          : imageData
+
         const payload = {
-          image: imageData,
+          image: base64Image,
           confidence,
         }
-        const payloadSize = (imageData.length / 1024).toFixed(2)
-        console.log(`Enviando imagen (${payloadSize}KB) al servidor...`)
+        const payloadSize = (base64Image.length / 1024).toFixed(2)
+        console.log(`Enviando imagen (${payloadSize}KB base64) al servidor...`)
 
-        if (imageData.length / 1024 > 5000) {
+        if (base64Image.length / 1024 > 5000) {
           console.error('Imagen demasiado grande (>5MB), reducir calidad')
           return
         }

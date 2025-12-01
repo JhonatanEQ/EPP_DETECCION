@@ -86,7 +86,7 @@ function processDetections(roboflowResponse) {
     ) {
         detectionsArray = predictionsBlock.predictions;
     } else {
-        console.warn('⚠️ No se encontraron predicciones en la respuesta de Roboflow');
+        console.warn('No se encontraron predicciones en la respuesta de Roboflow');
         return {
             totalDetections: 0,
             detectionsByClass: {},

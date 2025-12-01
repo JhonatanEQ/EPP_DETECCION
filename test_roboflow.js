@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const API_KEY = 'xxxxxxxxxxxxxxxxxxx';
+const API_KEY = 'xxxxxxxxxxxxxxxxxx';
 const API_URL = 'https://serverless.roboflow.com/workspace-ydydf/workflows/find-cascos-glasses-helmets-masks-vests-gloves-shirts-pants-and-boots-4';
 const IMAGE_PATH = 'API/models/prueba/IMG-20251125-WA0067.jpg';
 
