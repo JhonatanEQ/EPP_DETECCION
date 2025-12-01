@@ -29,18 +29,18 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    """Inicializa servicios al arrancar la aplicación"""
     print("╔════════════════════════════════════════════════════════════════╗")
     print("║     🚀 EPP DETECTION API - ARQUITECTURA MICROSERVICIOS        ║")
     print("╠════════════════════════════════════════════════════════════════╣")
-    print(f"║  Modelo EPP:  {(settings.model_path or 'models/ppe_best.pt')[:46]:<46} ║")
-    print(f"║  Modelo Pose: yolov8n-pose.pt                                  ║")
+    print(f"║  Modelo EPP:  {settings.model_path[:46]:<46} ║")
+    print(f"║  Modelo Pose: {settings.pose_model_abs_path[:46]:<46} ║")
+    print(f"║  PPE Service: {settings.ppe_service_url[:46]:<46} ║")
     print("╚════════════════════════════════════════════════════════════════╝")
 
     try:
         orchestrator = OrchestrationService(
-            pose_model_path="models/yolov8n-pose.pt",
-            ppe_service_url="http://localhost:3001", 
+            pose_model_path=settings.pose_model_abs_path,
+            ppe_service_url=settings.ppe_service_url,
         )
 
         init_orchestration(orchestrator)
