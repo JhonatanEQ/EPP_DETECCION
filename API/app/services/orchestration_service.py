@@ -161,46 +161,67 @@ class OrchestrationService:
     def _detect_ppe(self, image_data: bytes, confidence: float) -> Dict[str, Any]:
         """
         Detecta EPP usando el microservicio Node.js
-
-        Args:
-            image_data: Datos de la imagen
-            confidence: Umbral de confianza
-
-        Returns:
-            Resultados del microservicio EPP
         """
         try:
-
-            image_b64 = base64.b64encode(image_data).decode('utf-8')
+            image_b64 = base64.b64encode(image_data).decode("utf-8")
 
             payload = {
                 "image": image_b64,
-                "confidence": confidence
+                "confidence": confidence,
             }
 
+            url = f"{self.ppe_service_url.rstrip('/')}/detect"
+            logger.info(f"Llamando a microservicio EPP en: {url}")
+
             response = requests.post(
-                f"{self.ppe_service_url}/detect",
+                url,
                 json=payload,
-                timeout=30
+                timeout=30,
             )
 
-            if response.status_code == 200:
-                result = response.json()
-                logger.info(f"Detección EPP completada: {len(result.get('detections', []))} elementos")
-                return result
-            else:
-                logger.error(f"Error en microservicio EPP: {response.status_code} - {response.text}")
-                return {"detections": [], "summary": {}, "error": f"HTTP {response.status_code}"}
+            content_type = response.headers.get("content-type", "")
+
+            if response.status_code != 200:
+                snippet = response.text[:200].replace("\n", " ")
+                logger.error(
+                    f"Error en microservicio EPP: {response.status_code} - {snippet}"
+                )
+                return {
+                    "detections": [],
+                    "summary": {},
+                    "error": f"http_{response.status_code}",
+                }
+
+            if "application/json" not in content_type:
+                snippet = response.text[:200].replace("\n", " ")
+                logger.error(
+                    f"Respuesta no JSON desde microservicio EPP "
+                    f"(content-type={content_type}): {snippet}"
+                )
+                return {
+                    "detections": [],
+                    "summary": {},
+                    "error": "invalid_response_format",
+                }
+
+            result = response.json()
+            logger.info(
+                f"Detección EPP completada: {len(result.get('detections', []))} elementos"
+            )
+            return result
 
         except requests.exceptions.Timeout:
-            logger.error("⏱Timeout en microservicio EPP")
+            logger.error("⏱ Timeout en microservicio EPP")
             return {"detections": [], "summary": {}, "error": "timeout"}
+
         except requests.exceptions.RequestException as e:
             logger.error(f"Error conectando con microservicio EPP: {e}")
-            return {"detections": [], "summary": {}, "error": str(e)}
+            return {"detections": [], "summary": {}, "error": "connection_error"}
+
         except Exception as e:
             logger.error(f"Error inesperado en detección EPP: {e}")
-            return {"detections": [], "summary": {}, "error": str(e)}
+            return {"detections": [], "summary": {}, "error": "unexpected_error"}
+
 
     def validate_ppe(self, image_data: bytes, confidence: float = 0.5) -> Dict[str, Any]:
         """
