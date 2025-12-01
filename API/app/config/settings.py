@@ -1,6 +1,7 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Optional, List
 from pathlib import Path
+import os
 
 
 class Settings(BaseSettings):
@@ -27,7 +28,7 @@ class Settings(BaseSettings):
 
     confidence_threshold: float = 0.5
 
-    ppe_service_url: str = "http://localhost:3001"
+    ppe_service_url: str = os.getenv("PPE_SERVICE_URL", "http://localhost:3001")
 
     pose_model_path: str = "models/yolov8n-pose.pt"
 

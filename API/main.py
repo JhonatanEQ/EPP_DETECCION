@@ -9,6 +9,7 @@ from app.controllers.orchestration_controller import (
 )
 from app.controllers.ws_detection_controller import router as ws_router
 from app.services.orchestration_service import OrchestrationService
+import os
 
 app = FastAPI(
     title=settings.app_name,
